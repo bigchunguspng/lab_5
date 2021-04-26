@@ -23,13 +23,9 @@ namespace Lab_5
         {
             Random random = new Random();
             for (int i = 0; i < N; i++)
-            {
-                for (int j = 0; j < N; j++)
-                {
-                    this[i, j] = random.Next(-range, range);
-                }
-            }
-            
+            for (int j = 0; j < N; j++)
+                this[i, j] = random.Next(-range, range);
+
         }
 
         public static Matrix operator *(Matrix a, Matrix b)
@@ -37,16 +33,10 @@ namespace Lab_5
             Matrix result = new Matrix(a.N);
             
             for (int i = 0; i < result.N; i++)
-            {
-                for (int j = 0; j < result.N; j++)
-                {
-                    for (int k = 0; k < result.N; k++)
-                    {
-                        result[i, j] += a[i, k] * b[k, j];
-                    }
-                }
-            }
-            
+            for (int j = 0; j < result.N; j++)
+            for (int k = 0; k < result.N; k++)
+                result[i, j] += a[i, k] * b[k, j];
+
             return result;
         }
 
@@ -59,31 +49,21 @@ namespace Lab_5
                 {
                     int m = 1;
                     for (int j = 0; j < N; j++)
-                    {
                         m *= this[j, (j + i) % N];
-                    }    
                     result += m;
                 }
                 for (int i = 0; i < N; i++)
                 {
                     int m = 1;
                     for (int j = 0; j < N; j++)
-                    {
                         m *= this[j, (2 * N - 1 - j - i) % N];
-                    }
                     result -= m;
                 }
             }
             else
             {
-                for (int j = 0; j < N; j += 2)
-                {
-                    result += this[0, j] * Addition(0, j).Determinant();
-                }
-                for (int j = 1; j < N; j += 2)
-                {
-                    result -= this[0, j] * Addition(0, j).Determinant();
-                }
+                for (int j = 0; j < N; j += 2) result += this[0, j] * Addition(0, j).Determinant();
+                for (int j = 1; j < N; j += 2) result -= this[0, j] * Addition(0, j).Determinant();
             }
             
             return result;
@@ -116,13 +96,9 @@ namespace Lab_5
         {
             Matrix result = new Matrix(N);
             for (int i = 0; i < N; i++)
-            {
-                for (int j = 0; j < N; j++)
-                {
-                    result[i, j] = this[j, i];
-                }
-            }
-            
+            for (int j = 0; j < N; j++)
+                result[i, j] = this[j, i];
+
             return result;
         }
 
@@ -130,12 +106,8 @@ namespace Lab_5
         {
             string result = "";
             for (int i = 0; i < N; i++)
-            {
-                for (int j = 0; j < N; j++)
-                {
-                    result += this[i, j] + " ";
-                }
-            }
+            for (int j = 0; j < N; j++)
+                result += this[i, j] + " ";
 
             return result.Trim();
         }
@@ -151,17 +123,11 @@ namespace Lab_5
             {
                 result = new Matrix(n);
                 for (int i = 0; i < n; i++)
-                {
-                    for (int j = 0; j < n; j++)
-                    {
-                        result[i, j] = Int32.Parse(content[1 + i * n + j]);
-                    }
-                }
+                for (int j = 0; j < n; j++)
+                    result[i, j] = Int32.Parse(content[1 + i * n + j]);
             }
             else
-            {
                 result = new Matrix(1);
-            }
 
             return result;
         }

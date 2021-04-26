@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Lab_5
 {
@@ -12,15 +13,16 @@ namespace Lab_5
             Saver.Instance.ClearFile();
             for (int i = 0; i < matrices.Length; i++)
             {
-                matrices[i] = new Matrix(10); // для 20х20 довго рахує визначники
+                matrices[i] = new Matrix(10); // для 11х11 і вище визначники дуже довго рахуються
                 matrices[i].RandomFill();
                 Saver.Instance.Write(matrices[i]);
                 dets[i] = matrices[i].Determinant();
+                PrintMatrix(Saver.Instance.Read(i + 1));
             }
             
             Saver.Instance.Write("Визначники: " + string.Join(" ", dets) + "\n");
 
-            Matrix product = new Matrix(1);
+            Matrix product = new Matrix(matrices[0].N);
             for (int i = 0; i < matrices.Length - 1; i++)
             {
                 product = matrices[i] * matrices[i + 1];
@@ -28,6 +30,9 @@ namespace Lab_5
             }
             
             Saver.Instance.Write(product.Transpose());
+            
+            PrintMatrix(product);
+            PrintMatrix(product.Transpose());
             
             PressTo("замінити у файлі усі пять початкових матриць на нові розміром 5 на 5");
 
@@ -37,14 +42,17 @@ namespace Lab_5
                 matrices2[i] = new Matrix(5);
                 matrices2[i].RandomFill();
                 Saver.Instance.Replace(matrices2[i], i + 1);
+                Thread.Sleep(100); //інакше заповнюються однаковими числами
+                PrintMatrix(Saver.Instance.Read(i + 1));
             }
 
-            for (int i = 0; i < matrices.Length - 1; i++)
+            for (int i = 0; i < matrices2.Length - 1; i++)
             {
-                product = matrices[i] * matrices[i + 1];
+                product = matrices2[i] * matrices2[i + 1];
             }
             
             Saver.Instance.Write(product);
+            PrintMatrix(product);
             
             Saver.Instance.Defragment();
             
