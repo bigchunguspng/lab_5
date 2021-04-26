@@ -6,21 +6,52 @@ namespace Lab_5
     {
         public static void Main(string[] args)
         {
-            Matrix m = new Matrix(4);
-            m.RandomFill();
-            PrintMatrix(m);
+            Matrix[] matrices = new Matrix[5];
+            int[] dets = new int[matrices.Length];
+            Saver.Instance.OpenOrCreateFile("C:\\temp\\matrices.txt");
+            Saver.Instance.ClearFile();
+            for (int i = 0; i < matrices.Length; i++)
+            {
+                matrices[i] = new Matrix(10); // для 20х20 довго рахує визначники
+                matrices[i].RandomFill();
+                Saver.Instance.Write(matrices[i]);
+                dets[i] = matrices[i].Determinant();
+            }
             
-            Console.WriteLine(m.Determinant());
-            PrintMatrix(m.Transpose());
+            Saver.Instance.Write("Визначники: " + string.Join(" ", dets) + "\n");
+
+            Matrix product = new Matrix(1);
+            for (int i = 0; i < matrices.Length - 1; i++)
+            {
+                product = matrices[i] * matrices[i + 1];
+                Saver.Instance.Write(product);
+            }
             
-            Matrix n = new Matrix(m.N);
-            n.RandomFill();
-            PrintMatrix(n);
+            Saver.Instance.Write(product.Transpose());
             
-            PrintMatrix(n * m);
-            PrintMatrix(m * n);
+            PressTo("замінити у файлі усі пять початкових матриць на нові розміром 5 на 5");
+
+            Matrix[] matrices2 = new Matrix[matrices.Length];
+            for (int i = 0; i < matrices2.Length; i++)
+            {
+                matrices2[i] = new Matrix(5);
+                matrices2[i].RandomFill();
+                Saver.Instance.Replace(matrices2[i], i + 1);
+            }
+
+            for (int i = 0; i < matrices.Length - 1; i++)
+            {
+                product = matrices[i] * matrices[i + 1];
+            }
             
+            Saver.Instance.Write(product);
             
+            Saver.Instance.Defragment();
+            
+            Console.WriteLine("У файлі " + Saver.Instance.Count + " матриць");
+
+            Console.ReadKey();
+
         }
 
         private static void PrintMatrix(Matrix matrix)
@@ -34,6 +65,12 @@ namespace Lab_5
                 }
                 Console.WriteLine();
             }
+        }
+
+        private static void PressTo(string message)
+        {
+            Console.WriteLine("Натисніть будь-яку клавішу, щоб " + message);
+            Console.ReadKey();
         }
     }
 }

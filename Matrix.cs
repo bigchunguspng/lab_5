@@ -125,5 +125,45 @@ namespace Lab_5
             
             return result;
         }
+
+        public string Serialize()
+        {
+            string result = "";
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+                    result += this[i, j] + " ";
+                }
+            }
+
+            return result.Trim();
+        }
+
+        public static Matrix Deserialize(string line)
+        {
+            Matrix result;
+            line = line.Trim();
+            string[] content = line.Split(' ');
+            int length = content.Length - 1;
+            int n = (int) Math.Round(Math.Sqrt(length));
+            if (Math.Abs(Math.Sqrt(length) - Math.Round(Math.Sqrt(length))) < 0.0001)
+            {
+                result = new Matrix(n);
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        result[i, j] = Int32.Parse(content[1 + i * n + j]);
+                    }
+                }
+            }
+            else
+            {
+                result = new Matrix(1);
+            }
+
+            return result;
+        }
     }
 }
